@@ -27,6 +27,7 @@ class Curve(object):
         self.a = a
         self.b = b
         self.field = field
+        self.g = Point(self, self.field.g[0], self.field.g[1])
 
     def is_singular(self):
         return (4 * self.a**3 + 27 * self.b**2) % self.field.p == 0
@@ -57,6 +58,13 @@ class SubGroup(object):
 
     def __ne__(self, other):
         return self.__eq__(other)
+
+    def __str__(self):
+        return "Subgroup => generator %s, order: %d, cofactor: %d on Field => prime %d" % (self.g, self.n,
+                                                                                           self.h, self.p)
+
+    def __repr__(self):
+        return self.__str__()
 
 
 class Inf(object):
