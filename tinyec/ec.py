@@ -41,7 +41,7 @@ class Curve(object):
         return self.a == other.a and self.b == other.b and self.field == other.field
 
     def __str__(self):
-        return "%s => y^2 = x^3 + %dx + %d (mod %d)" % (self.name, self.a, self.b, self.field.p)
+        return "\"%s\" => y^2 = x^3 + %dx + %d (mod %d)" % (self.name, self.a, self.b, self.field.p)
 
 
 class SubGroup(object):
@@ -112,7 +112,7 @@ class Point(object):
         self.p = self.curve.field.p
         self.on_curve = True
         if not self.curve.on_curve(self.x, self.y):
-            warnings.warn("Point (%d, %d) is not on curve %s" % (self.x, self.y, self.curve))
+            warnings.warn("Point (%d, %d) is not on curve \"%s\"" % (self.x, self.y, self.curve))
             self.on_curve = False
 
     def __m(self, p, q):
@@ -179,7 +179,7 @@ class Point(object):
         return self.__mul__(other)
 
     def __str__(self):
-        return "(%d, %d) on %s" % (self.x, self.y, self.curve)
+        return "(%d, %d) %s %s" % (self.x, self.y, "on" if self.on_curve else "off", self.curve)
 
     def __repr__(self):
         return self.__str__()
