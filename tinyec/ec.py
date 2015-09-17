@@ -158,7 +158,7 @@ class Point(object):
     def __mul__(self, other):
         if isinstance(other, Inf) or other % self.curve.field.n == 0:
             return Inf(self.curve)
-        if isinstance(other, int):
+        if isinstance(other, int) or isinstance(other, long):
             # Broken, should be -other * -self
             if other < 0:
                 addend = Point(self.curve, self.x, -self.y % self.p)

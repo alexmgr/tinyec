@@ -17,4 +17,3 @@ class TestGetCurve(unittest.TestCase):
         self.assertIsInstance(curve, ec.Curve)
         self.assertEqual(curve_name, curve.name)
         self.assertEqual(reg.EC_CURVE_REGISTRY[curve_name]["n"], curve.field.n)
-        print(curve.field)
