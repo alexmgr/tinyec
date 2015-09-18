@@ -12,7 +12,7 @@ def read_(file_name):
 
 setup(
     name="tinyec",
-    version="0.2",
+    version="0.3",
     packages=["tinyec"],
     author="Alex Moneger",
     author_email="alexmgr+github@gmail.com",
@@ -21,7 +21,7 @@ setup(
     license="GPLv3",
     keywords=["elliptic", "curves", "crypto", "tls", "ssl", "ecdhe", "diffie-hellman"],
     url="https://github.com/alexmgr/tinyec",
-    download_url="https://github.com/alexmgr/tinyec/archive/v0.2.tar.gz",
+    download_url="https://github.com/alexmgr/tinyec/archive/v0.3.tar.gz",
     long_description=read_("README.md"),
     test_suite="nose.collector",
     tests_require=["nose"])
