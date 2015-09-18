@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 
 import unittest
+
 import tinyec.ec as ec
+import tinyec.registry as reg
 
 
 class TestCurve(unittest.TestCase):
 
     def setUp(self):
         self.field = ec.SubGroup(23, (1, 2), 5, 1)
+        self.curve = reg.get_curve("brainpoolP384r1")
         super(TestCurve, self).setUp()
 
     def test_when_specific_a_and_b_are_used_then_curve_is_singular(self):
@@ -86,3 +89,44 @@ class TestPoint(unittest.TestCase):
         p1 = ec.Point(self.curve, 3, 6)
         with self.assertRaises(TypeError):
             p1 * p1
+
+
+class TestKeyPair(unittest.TestCase):
+    def setUp(self):
+        self.curve = reg.get_curve("brainpoolP160r1")
+        super(TestKeyPair, self).setUp()
+
+    def test_when_keypair_is_generated_then_public_key_is_on_curve(self):
+        keypair = ec.make_keypair(self.curve)
+        self.assertTrue(1 <= keypair.priv <= self.curve.field.n)
+        self.assertTrue(self.curve.on_curve(keypair.pub.x, keypair.pub.y))
+
+    def test_when_no_keys_are_provided_then_error_is_raised(self):
+        with self.assertRaises(ValueError):
+            ec.Keypair(self.curve, None, None)
+
+    def test_when_no_public_key_is_provided_then_it_is_calculated_from_private_key(self):
+        keypair = ec.make_keypair(self.curve)
+        keys = ec.Keypair(self.curve, keypair.priv)
+        self.assertEqual(keypair.pub, keys.pub)
+        self.assertTrue(keys.can_encrypt)
+        self.assertTrue(keys.can_sign)
+
+
+class TestECDH(unittest.TestCase):
+    def setUp(self):
+        self.curve = reg.get_curve("secp384r1")
+        super(TestECDH, self).setUp()
+
+    def test_when_dh_secret_is_generated_then_it_matches_on_both_keypairs(self):
+        keypair1 = ec.make_keypair(self.curve)
+        keypair2 = ec.make_keypair(self.curve)
+        self.assertNotEqual(keypair1.priv, keypair2.priv)
+        self.assertNotEqual(keypair1.pub, keypair2.pub)
+        ecdh1 = ec.ECDH(keypair1)
+        ecdh2 = ec.ECDH(keypair2)
+        self.assertEqual(ecdh1.get_secret(keypair2), ecdh2.get_secret(keypair1))
+        # Test that secret computation works without priv key
+        keypair3 = ec.Keypair(self.curve, pub=keypair1.pub)
+        ecdh3 = ec.ECDH(keypair3)
+        self.assertEqual(ecdh3.get_secret(keypair2), ecdh2.get_secret(keypair3))
