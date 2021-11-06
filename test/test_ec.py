@@ -87,13 +87,18 @@ class TestPoint(unittest.TestCase):
 
     def test_when_point_is_not_multiplied_by_an_int_then_error_is_raised(self):
         p1 = ec.Point(self.curve, 3, 6)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError) as contextMgr:
             p1 * p1
+
+        tErr = contextMgr.exception
+        self.assertRegexpMatches(tErr.message, "Unsupported operand type\\(s\\) for \\*\\: \'Point\' and \'Point\'", "Unexpected TypeError message - did the message change or this being thrown from a different location?")
 
     def test_python3_compat_when_point_is_not_multiplied_by_int_or_point_then_error_is_raised(self):
         p1 = ec.Point(self.curve, 3, 6)
-        with self.assertRaises(TypeError):
+        with self.assertRaises(TypeError) as contextMgr:
             p1 * 5.6
+        tErr = contextMgr.exception
+        self.assertRegexpMatches(tErr.message, "Unsupported operand type\\(s\\) for \\*\\: \'float\' and \'Point\'", "Unexpected TypeError message - did the message change or this being thrown from a different location?")
 
 class TestKeyPair(unittest.TestCase):
     def setUp(self):
