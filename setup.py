@@ -24,4 +24,7 @@ setup(
     download_url="https://github.com/alexmgr/tinyec/archive/v0.3.1.tar.gz",
     long_description=read_("README.md"),
     test_suite="nose.collector",
-    tests_require=["nose"])
+    tests_require=["nose"],
+    classifiers=[
+        "Programming Language :: Python :: 2.7",
+        "Programming Language :: Python :: 3"])
