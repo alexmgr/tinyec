@@ -95,7 +95,7 @@ class Inf(object):
             return Inf()
         if isinstance(other, Point):
             return other
-        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (q.__class__.__name__,
+        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
                                                                                   self.__class__.__name__))
 
     def __sub__(self, other):
@@ -103,7 +103,7 @@ class Inf(object):
             return Inf()
         if isinstance(other, Point):
             return other
-        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (q.__class__.__name__,
+        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
                                                                                   self.__class__.__name__))
 
     def __str__(self):
