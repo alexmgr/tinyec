@@ -3,6 +3,11 @@ import random
 
 import warnings
 
+# Python3 compatibility
+try:
+    LONG_TYPE = long
+except NameError:
+    LONG_TYPE = int
 
 def egcd(a, b):
     if a == 0:
@@ -162,7 +167,7 @@ class Point(object):
     def __mul__(self, other):
         if isinstance(other, Inf):
             return Inf(self.curve)
-        if isinstance(other, int) or isinstance(other, long):
+        if isinstance(other, int) or isinstance(other, LONG_TYPE):
             if other % self.curve.field.n == 0:
                 return Inf(self.curve)
             if other < 0:
