@@ -90,6 +90,10 @@ class TestPoint(unittest.TestCase):
         with self.assertRaises(TypeError):
             p1 * p1
 
+    def test_python3_compat_when_point_is_not_multiplied_by_int_or_point_then_error_is_raised(self):
+        p1 = ec.Point(self.curve, 3, 6)
+        with self.assertRaises(TypeError):
+            p1 * 5.6
 
 class TestKeyPair(unittest.TestCase):
     def setUp(self):
