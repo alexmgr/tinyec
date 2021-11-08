@@ -3,6 +3,11 @@ import random
 
 import warnings
 
+# Python3 compatibility
+try:
+    LONG_TYPE = long
+except NameError:
+    LONG_TYPE = int
 
 def egcd(a, b):
     if a == 0:
@@ -90,7 +95,7 @@ class Inf(object):
             return Inf()
         if isinstance(other, Point):
             return other
-        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (q.__class__.__name__,
+        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
                                                                                   self.__class__.__name__))
 
     def __sub__(self, other):
@@ -98,7 +103,7 @@ class Inf(object):
             return Inf()
         if isinstance(other, Point):
             return other
-        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (q.__class__.__name__,
+        raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
                                                                                   self.__class__.__name__))
 
     def __str__(self):
@@ -160,9 +165,11 @@ class Point(object):
                                                                                   self.__class__.__name__))
 
     def __mul__(self, other):
-        if isinstance(other, Inf) or other % self.curve.field.n == 0:
+        if isinstance(other, Inf):
             return Inf(self.curve)
-        if isinstance(other, int) or isinstance(other, long):
+        if isinstance(other, int) or isinstance(other, LONG_TYPE):
+            if other % self.curve.field.n == 0:
+                return Inf(self.curve)
             if other < 0:
                 addend = Point(self.curve, self.x, -self.y % self.p)
             else:
