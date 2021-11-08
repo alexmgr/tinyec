@@ -23,6 +23,7 @@ setup(
     url="https://github.com/alexmgr/tinyec",
     download_url="https://github.com/alexmgr/tinyec/archive/v0.4.0.tar.gz",
     long_description=read_("README.md"),
+    long_description_content_type="text/markdown",
     test_suite="nose.collector",
     tests_require=["nose"],
     classifiers=[
