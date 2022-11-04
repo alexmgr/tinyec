@@ -12,7 +12,7 @@ def read_(file_name):
 
 setup(
     name="tinyec",
-    version="0.4.0",
+    version="0.4.1",
     packages=["tinyec"],
     author="Alex Moneger",
     author_email="alexmgr+github@gmail.com",
