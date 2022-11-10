@@ -139,3 +139,19 @@ class TestECDH(unittest.TestCase):
         keypair3 = ec.Keypair(self.curve, pub=keypair1.pub)
         ecdh3 = ec.ECDH(keypair3)
         self.assertEqual(ecdh3.get_secret(keypair2), ecdh2.get_secret(keypair3))
+
+class TestSECP256K1(unittest.TestCase):
+    def setUp(self):
+        self.curve = reg.get_curve("secp256k1")
+        super(TestSECP256K1, self).setUp()
+
+    def test_known_vectors_for_secp256k1(self):
+        p0 = 1 * self.curve.g
+        self.assertEqual(p0.x, 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798)
+        self.assertEqual(p0.y, 0x483ADA7726A3C4655DA4FBFC0E1108A8FD17B448A68554199C47D08FFB10D4B8)
+        p1 = 112233445566778899112233445566778899 * self.curve.g
+        self.assertEqual(p1.x, 0xE5A2636BCFD412EBF36EC45B19BFB68A1BC5F8632E678132B885F7DF99C5E9B3)
+        self.assertEqual(p1.y, 0x736C1CE161AE27B405CAFD2A7520370153C2C861AC51D6C1D5985D9606B45F39)
+        p2 = 115792089237316195423570985008687907852837564279074904382605163141518161494336 * self.curve.g
+        self.assertEqual(p2.x, 0x79BE667EF9DCBBAC55A06295CE870B07029BFCDB2DCE28D959F2815B16F81798)
+        self.assertEqual(p2.y, 0xB7C52588D95C3B9AA25B0403F1EEF75702E84BB7597AABE663B82F6F04EF2777)
