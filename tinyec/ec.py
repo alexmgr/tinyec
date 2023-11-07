@@ -3,11 +3,7 @@ import random
 
 import warnings
 
-# Python3 compatibility
-try:
-    LONG_TYPE = long
-except NameError:
-    LONG_TYPE = int
+LONG_TYPE = int
 
 def egcd(a, b):
     if a == 0:
