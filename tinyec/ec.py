@@ -187,17 +187,27 @@ class Point:
 
 class Keypair:
     def __init__(self, curve: Curve, priv: Optional[int]=None, pub: Optional[Point]=None):
-        if priv is None and pub is None:
-            raise ValueError("Private and/or public key must be provided")
         self.curve = curve
         self.can_sign = True
         self.can_encrypt = True
+        self.priv: Optional[int] = priv
         if priv is None:
             self.can_sign = False
-        self.priv = priv
-        self.pub = pub
-        if pub is None:
-            self.pub = self.priv * self.curve.g
+            if pub is None:
+                raise ValueError("At least one of private or public key must be provided.")
+            self.pub = pub
+        else:
+            self.can_sign = True
+            if pub is None:
+                self.pub = self._generate_pub(priv)
+            else:
+                self.pub = pub
+
+    def _generate_pub(self, priv: int) -> Point:
+        result = self.priv * self.curve.g
+        if isinstance(result, Inf):
+            raise ValueError("Generated public value at infinity point.")
+        return result
 
 
 class ECDH:
