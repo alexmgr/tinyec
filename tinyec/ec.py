@@ -86,7 +86,7 @@ class Inf:
 
     def __add__(self, other: Any) -> Union["Inf", "Point"]:
         if isinstance(other, Inf):
-            return Inf()
+            return Inf(self.curve)
         if isinstance(other, Point):
             return other
         raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
@@ -94,7 +94,7 @@ class Inf:
 
     def __sub__(self, other: Any) -> Union["Inf", "Point"]:
         if isinstance(other, Inf):
-            return Inf()
+            return Inf(self.curve)
         if isinstance(other, Point):
             return other
         raise TypeError("Unsupported operand type(s) for +: '%s' and '%s'" % (other.__class__.__name__,
