@@ -161,23 +161,19 @@ class Point:
     def __mul__(self, other: Any) -> Union[Inf, "Point"]:
         if isinstance(other, Inf):
             return Inf(self.curve)
-        if isinstance(other, int):
-            if other % self.curve.field.n == 0:
-                return Inf(self.curve)
-            if other < 0:
-                addend = Point(self.curve, self.x, -self.y % self.p)
-            else:
-                addend = self
-            result = Inf(self.curve)
-            # Iterate over all bits starting by the LSB
-            for bit in reversed([int(i) for i in bin(abs(other))[2:]]):
-                if bit == 1:
-                    result += addend
-                addend += addend
-            return result
-        else:
+        if not isinstance(other, int):
             raise TypeError("Unsupported operand type(s) for *: '%s' and '%s'" % (other.__class__.__name__,
                                                                                   self.__class__.__name__))
+        if other % self.curve.field.n == 0:
+            return Inf(self.curve)
+        addend: Union[Inf, Point] = Point(self.curve, self.x, -self.y % self.p) if other < 0 else self
+        result: Union[Inf, Point] = Inf(self.curve)
+        # Iterate over all bits starting by the LSB
+        for bit in reversed([int(i) for i in bin(abs(other))[2:]]):
+            if bit == 1:
+                result += addend
+            addend += addend
+        return result
 
     def __rmul__(self, other: Any) -> Union[Inf, "Point"]:
         return self.__mul__(other)
