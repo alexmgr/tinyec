@@ -214,14 +214,16 @@ class ECDH:
     def __init__(self, keypair: Keypair):
         self.keypair = keypair
 
-    def get_secret(self, keypair: Keypair) -> Point:
-        # Don;t check if both keypairs are on the same curve. Should raise a warning only
-        if self.keypair.can_sign and keypair.can_encrypt:
-            secret = self.keypair.priv * keypair.pub
-        elif self.keypair.can_encrypt and keypair.can_sign:
-            secret = self.keypair.pub * keypair.priv
+    def get_secret(self, other: Keypair) -> Point:
+        # Don't check if both keypairs are on the same curve. Should raise a warning only
+        if self.keypair.priv is not None and self.keypair.can_sign and other.can_encrypt:
+            secret = self.keypair.priv * other.pub
+        elif self.keypair.can_encrypt and other.can_sign and other.priv is not None:
+            secret = self.keypair.pub * other.priv
         else:
             raise ValueError("Missing crypto material to generate DH secret")
+        if isinstance(secret, Inf):
+            raise ValueError("Got a secret that is at the infinite point")
         return secret
 
 
