@@ -230,4 +230,6 @@ class ECDH:
 def make_keypair(curve: Curve) -> Keypair:
     priv = random.randint(1, curve.field.n)
     pub = priv * curve.g
+    if isinstance(pub, Inf):
+        raise RuntimeError("Created infinite public key")
     return Keypair(curve, priv, pub)
