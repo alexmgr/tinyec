@@ -2,8 +2,6 @@ import random
 
 import warnings
 
-LONG_TYPE = int
-
 def egcd(a, b):
     if a == 0:
         return b, 0, 1
@@ -162,7 +160,7 @@ class Point(object):
     def __mul__(self, other):
         if isinstance(other, Inf):
             return Inf(self.curve)
-        if isinstance(other, int) or isinstance(other, LONG_TYPE):
+        if isinstance(other, int):
             if other % self.curve.field.n == 0:
                 return Inf(self.curve)
             if other < 0:
