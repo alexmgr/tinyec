@@ -20,7 +20,7 @@ def mod_inv(a, p):
         return x % p
 
 
-class SubGroup(object):
+class SubGroup:
     def __init__(self, p, g, n, h):
         self.p = p
         self.g = g
@@ -43,7 +43,7 @@ class SubGroup(object):
         return self.__str__()
 
 
-class Curve(object):
+class Curve:
     def __init__(self, a, b, field, name="undefined"):
         self.name = name
         self.a = a
@@ -69,7 +69,7 @@ class Curve(object):
         return "\"%s\" => y^2 = x^3 + %dx + %d (mod %d)" % (self.name, self.a, self.b, self.field.p)
 
 
-class Inf(object):
+class Inf:
     def __init__(self, curve, x=None, y=None):
         self.x = x
         self.y = y
@@ -106,7 +106,7 @@ class Inf(object):
         return self.__str__()
 
 
-class Point(object):
+class Point:
     def __init__(self, curve, x, y):
         self.curve = curve
         self.x = x
@@ -188,7 +188,7 @@ class Point(object):
         return self.__str__()
 
 
-class Keypair(object):
+class Keypair:
     def __init__(self, curve, priv=None, pub=None):
         if priv is None and pub is None:
             raise ValueError("Private and/or public key must be provided")
@@ -203,7 +203,7 @@ class Keypair(object):
             self.pub = self.priv * self.curve.g
 
 
-class ECDH(object):
+class ECDH:
     def __init__(self, keypair):
         self.keypair = keypair
 
