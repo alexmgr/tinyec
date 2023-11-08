@@ -20,6 +20,29 @@ def mod_inv(a, p):
         return x % p
 
 
+class SubGroup(object):
+    def __init__(self, p, g, n, h):
+        self.p = p
+        self.g = g
+        self.n = n
+        self.h = h
+
+    def __eq__(self, other):
+        if not isinstance(other, SubGroup):
+            return False
+        return self.p == other.p and self.g == other.g and self.n == other.n and self.h == other.h
+
+    def __ne__(self, other):
+        return not self.__eq__(other)
+
+    def __str__(self):
+        return "Subgroup => generator %s, order: %d, cofactor: %d on Field => prime %d" % (self.g, self.n,
+                                                                                           self.h, self.p)
+
+    def __repr__(self):
+        return self.__str__()
+
+
 class Curve(object):
     def __init__(self, a, b, field, name="undefined"):
         self.name = name
@@ -44,29 +67,6 @@ class Curve(object):
 
     def __str__(self):
         return "\"%s\" => y^2 = x^3 + %dx + %d (mod %d)" % (self.name, self.a, self.b, self.field.p)
-
-
-class SubGroup(object):
-    def __init__(self, p, g, n, h):
-        self.p = p
-        self.g = g
-        self.n = n
-        self.h = h
-
-    def __eq__(self, other):
-        if not isinstance(other, SubGroup):
-            return False
-        return self.p == other.p and self.g == other.g and self.n == other.n and self.h == other.h
-
-    def __ne__(self, other):
-        return not self.__eq__(other)
-
-    def __str__(self):
-        return "Subgroup => generator %s, order: %d, cofactor: %d on Field => prime %d" % (self.g, self.n,
-                                                                                           self.h, self.p)
-
-    def __repr__(self):
-        return self.__str__()
 
 
 class Inf(object):
@@ -188,12 +188,6 @@ class Point(object):
         return self.__str__()
 
 
-def make_keypair(curve):
-    priv = random.randint(1, curve.field.n)
-    pub = priv * curve.g
-    return Keypair(curve, priv, pub)
-
-
 class Keypair(object):
     def __init__(self, curve, priv=None, pub=None):
         if priv is None and pub is None:
@@ -222,3 +216,9 @@ class ECDH(object):
         else:
             raise ValueError("Missing crypto material to generate DH secret")
         return secret
+
+
+def make_keypair(curve):
+    priv = random.randint(1, curve.field.n)
+    pub = priv * curve.g
+    return Keypair(curve, priv, pub)
